@@ -1,5 +1,6 @@
 import { agent, connectToDatabase, expect, faker, Factory } from '../setup.js'
 import House from '../../src/models/house.js'
+import mongoose from 'mongoose'
 
 describe('/houses', function () {
   let response
@@ -52,6 +53,36 @@ describe('/houses', function () {
         const id = response.body._id
         const house = await House.findOne({ _id: id }).exec()
         expect(house.name).to.eq(houseParams.name)
+      })
+    })
+  })
+
+  describe('DELETE /:id', function () {
+    context('when the house with given id is found', function () {
+      let house
+
+      beforeEach(async function () {
+        house = await House.create(Factory.build('house'))
+      })
+
+      it('responds with 200 OK status code', async function () {
+        const response = await agent.delete(`/houses/${house._id}`)
+        expect(response.status).to.eq(200)
+      })
+
+      it('deletes the house from the database', async function () {
+        const id = house._id
+        await agent.delete(`/houses/${id}`)
+        const matchingHouse = await House.findOne({ _id: id })
+        expect(matchingHouse).not.to.exist
+      })
+    })
+
+    context('when the house with given id is not found', function () {
+      it('responds with 404 Not Found status code', async function () {
+        const fakeObjectId = mongoose.Types.ObjectId()
+        const response = await agent.delete(`/houses/${fakeObjectId}`)
+        expect(response.status).to.eq(404)
       })
     })
   })

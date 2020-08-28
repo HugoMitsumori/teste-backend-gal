@@ -18,4 +18,16 @@ router.post('/', async (req, res) => {
   res.status(201).json(house)
 })
 
+router.delete('/:id', async (req, res) => {
+  await connectToDatabase()
+  const house = await House.findOne({ _id: req.params.id })
+
+  if (house) {
+    await House.deleteOne({ _id: req.params.id })
+    res.status(200).json()
+  } else {
+    res.status(404).json({ error: 'House not found!' })
+  }
+})
+
 export default router
