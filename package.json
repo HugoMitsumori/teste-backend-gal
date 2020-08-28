@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "mocha --require esm --exit",
+    "test": "NODE_ENV=test mocha --exit test/**/*.spec.js",
     "dev": "npm run lint && npm run test",
     "start": "nodemon node ."
   },

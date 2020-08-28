@@ -1,9 +1,9 @@
 import chai from 'chai'
 import request from 'supertest'
-import app from '../src/index'
+import app from '../src/index.js'
 import faker from 'faker'
-import connectToDatabase from '../src/database-connection'
-import Factory from './factory'
+import connectToDatabase from '../src/database-connection.js'
+import Factory from './factory.js'
 
 const expect = chai.expect
 const agent = request.agent(app)
