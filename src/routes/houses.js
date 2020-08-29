@@ -6,7 +6,15 @@ const router = express.Router()
 
 router.get('/', async (req, res) => {
   await connectToDatabase()
-  const houses = await House.find().exec()
+  let houses
+
+  if (req.query.id) {
+    houses = await House.find({ _id: req.query.id }).exec()
+  } else if (req.query.name) {
+    houses = await House.find({ name: req.query.name }).exec()
+  } else {
+    houses = await House.find().exec()
+  }
 
   res.status(200).json(houses)
 })

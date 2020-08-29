@@ -18,16 +18,43 @@ describe('/houses', function () {
       housesAmount = faker.random.number({ min: 2, max: 10 })
       housesParams = Factory.buildList('house', housesAmount)
       await Promise.all(housesParams.map((houseParams) => House.create(houseParams)))
-      response = await agent.get('/houses')
     })
 
-    it('responds with status 200 OK', function () {
+    it('responds with status 200 OK', async function () {
+      response = await agent.get('/houses')
       expect(response.status).to.eq(200)
     })
 
-    it('responds with all the stored houses', function () {
+    it('responds with all the stored houses', async function () {
+      response = await agent.get('/houses')
       const responseHouseNames = response.body.map(house => house.name).sort()
       expect(responseHouseNames).to.have.members(housesParams.map(house => house.name).sort())
+    })
+
+    context('when an id is provided', function () {
+      let house
+
+      beforeEach(async function () {
+        house = await House.findOne({}).exec()
+        response = await agent.get('/houses?id=' + house._id)
+      })
+
+      it('returns the house matching the id', async function () {
+        expect(response.body[0]._id).to.eq(house._id.toString())
+      })
+    })
+
+    context('when an name is provided', function () {
+      let house
+
+      beforeEach(async function () {
+        house = await House.findOne({}).exec()
+        response = await agent.get('/houses?name=' + house.name)
+      })
+
+      it('returns the houses matching the name', async function () {
+        expect(response.body.every(resHouse => resHouse.name === house.name)).to.eq(true)
+      })
     })
   })
 
