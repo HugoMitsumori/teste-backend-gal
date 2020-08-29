@@ -12,10 +12,11 @@ const houseSchema = new Schema({
     required: true,
   },
   currentLord: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'Character',
   },
   founded: {
-    tyope: String,
+    type: String,
   },
 })
 

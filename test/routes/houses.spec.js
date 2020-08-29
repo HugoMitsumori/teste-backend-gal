@@ -44,7 +44,7 @@ describe('/houses', function () {
         expect(response.status).to.eq(201)
       })
 
-      it('stores a new resource in the database', async function () {
+      it('stores a new house in the database', async function () {
         const house = await House.findOne().exec()
         expect(house).to.exist
       })

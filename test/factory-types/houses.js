@@ -1,10 +1,10 @@
 import faker from 'faker'
 
-const house = (params) => {
+const house = (params = {}) => {
   return {
     name: params.name || faker.name.findName(),
     region: params.region || faker.address.country(),
-    currentLord: params.currentLord || faker.name.findName(),
+    currentLord: params.currentLord,
     founded: params.founded || faker.date.past(),
   }
 }
